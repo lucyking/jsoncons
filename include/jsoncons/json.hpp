@@ -2786,9 +2786,15 @@ public:
     }
 
     template <size_t dim, class T>
-    static typename std::enable_if<dim==1,basic_json>::type make_array(size_t n, const T& val, const Allocator& allocator = Allocator())
+    static typename std::enable_if<dim==1,basic_json>::type make_array(size_t n, const T& val)
     {
-        return array(n,val,allocator);
+        return array(n,basic_json(val));
+    }
+
+    template <size_t dim, class T>
+    static typename std::enable_if<dim == 1, basic_json>::type make_array(size_t n, const T& val, const Allocator& allocator)
+    {
+        return array(n, basic_json(val,allocator));
     }
 
     template <size_t dim, typename... Args>
@@ -3981,7 +3987,7 @@ public:
             create_object_implicitly();
             // FALLTHRU
         case json_type_tag::object_t:
-            return object_value().insert_or_assign(name, std::forward<T>(val));
+            return object_value().insert_or_assign(name, basic_json(std::forward<T>(val)));
         default:
             {
                 JSONCONS_THROW_EXCEPTION_1(std::runtime_error,"Attempting to set %s on a value that is not an object", view_to_string(name));

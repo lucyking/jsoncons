@@ -82,20 +82,27 @@ private:
 
 BOOST_AUTO_TEST_CASE(test_filter)
 {
-    std::string in_file = "./input/address-book.json";
-    std::string out_file = "./output/address-book-new.json";
-    std::ifstream is(in_file, std::ofstream::binary);
-    std::ofstream os(out_file);
+    try
+    {
+        std::string in_file = "./input/address-book.json";
+        std::string out_file = "./output/address-book-new.json";
+        std::ifstream is(in_file, std::ofstream::binary);
+        std::ofstream os(out_file);
 
-    json_serializer serializer(os, true);
-    name_fix_up_filter filter(serializer);
-    json_reader reader(is, filter);
-    reader.read_next();
+        json_serializer serializer(os, true);
+        name_fix_up_filter filter(serializer);
+        json_reader reader(is, filter);
+        reader.read_next();
 
-    BOOST_CHECK_EQUAL(1,filter.warnings.size());
-    BOOST_CHECK_EQUAL("John", filter.warnings[0].name);
-    BOOST_CHECK_EQUAL(9, filter.warnings[0].line_number);
-    BOOST_CHECK_EQUAL(26, filter.warnings[0].column_number);
+        BOOST_CHECK_EQUAL(1,filter.warnings.size());
+        BOOST_CHECK_EQUAL("John", filter.warnings[0].name);
+        BOOST_CHECK_EQUAL(9, filter.warnings[0].line_number);
+        BOOST_CHECK_EQUAL(26, filter.warnings[0].column_number);
+    }
+    catch (const std::exception e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 BOOST_AUTO_TEST_CASE(test_filter2)
