@@ -602,7 +602,7 @@ public:
     json_object(std::initializer_list<std::pair<string_view_type,Json>> init)
         : Json_object_<KeyT,Json>()
     {
-        members_.reserve(init.size());
+        this->members_.reserve(init.size());
         for (auto& item : init)
         {
             insert_or_assign(item.first, item.second);
@@ -613,7 +613,7 @@ public:
                 const allocator_type& allocator)
         : Json_object_<KeyT,Json>(allocator)
     {
-        members_.reserve(init.size());
+        this->members_.reserve(init.size());
         for (auto& item : init)
         {
             insert_or_assign(item.first, item.second, allocator);
@@ -1252,6 +1252,7 @@ public:
     json_object(std::initializer_list<std::pair<string_view_type,Json>> init)
         : Json_object_<KeyT,Json>()
     {
+        this->members_.reserve(init.size());
         for (auto& item : init)
         {
             insert_or_assign(item.first, item.second);
@@ -1262,6 +1263,7 @@ public:
                 const allocator_type& allocator)
         : Json_object_<KeyT,Json>(allocator)
     {
+        this->members_.reserve(init.size());
         for (auto& item : init)
         {
             insert_or_assign(item.first, item.second, allocator);
