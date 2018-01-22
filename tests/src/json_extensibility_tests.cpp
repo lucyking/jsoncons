@@ -206,7 +206,7 @@ BOOST_AUTO_TEST_CASE(test_boost_matrix)
     A(1, 0) = 3.1;
     A(1, 1) = 4.1;
 
-    json a = A;
+    json a = json(A);
 
     BOOST_CHECK(a.is<matrix<double>>());
     BOOST_CHECK(!a.is<matrix<int>>());

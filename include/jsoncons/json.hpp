@@ -4006,8 +4006,9 @@ public:
         }
     }
 
-    template <class T>
-    void set_(key_storage_type&& name, T&& val)
+    template <class T, class A=allocator_type>
+    typename std::enable_if<is_stateless<A>::value,void>::type 
+    set_(key_storage_type&& name, T&& val)
     {
         switch (var_.type_id())
         {
@@ -4015,8 +4016,28 @@ public:
             create_object_implicitly();
             // FALLTHRU
         case json_type_tag::object_t:
-            object_value().set_(std::forward<key_storage_type>(name), std::forward<T>(val));
+            object_value().set_(std::forward<key_storage_type>(name), basic_json(std::forward<T>(val)));
             break;
+        default:
+            {
+                JSONCONS_THROW_EXCEPTION(std::runtime_error,"Attempting to call set on a value that is not an object");
+            }
+        }
+    }
+
+    template <class T, class A=allocator_type>
+    typename std::enable_if<!is_stateless<A>::value,void>::type 
+    set_(key_storage_type&& name, T&& val)
+    {
+        switch (var_.type_id())
+        {
+        case json_type_tag::object_t:
+            object_value().set_(std::forward<key_storage_type>(name), basic_json(std::forward<T>(val),object_value().get_allocator()));
+            break;
+        case json_type_tag::empty_object_t:
+            {
+                JSONCONS_THROW_EXCEPTION(std::runtime_error,"Attempting to call set on a value that is not an object");
+            }
         default:
             {
                 JSONCONS_THROW_EXCEPTION(std::runtime_error,"Attempting to call set on a value that is not an object");
@@ -4209,8 +4230,9 @@ public:
         }
     }
 
-    template <class T>
-    object_iterator set_(object_iterator hint, key_storage_type&& name, T&& val)
+    template <class T, class A=allocator_type>
+    typename std::enable_if<is_stateless<A>::value,object_iterator>::type 
+    set_(object_iterator hint, key_storage_type&& name, T&& val)
     {
         switch (var_.type_id())
         {
@@ -4218,8 +4240,25 @@ public:
             create_object_implicitly();
             // FALLTHRU
         case json_type_tag::object_t:
-            return object_value().set_(hint, std::forward<key_storage_type>(name), std::forward<T>(val));
+            return object_value().set_(hint, std::forward<key_storage_type>(name), basic_json(std::forward<T>(val)));
             break;
+        default:
+            {
+                JSONCONS_THROW_EXCEPTION(std::runtime_error,"Attempting to set on a value that is not an object");
+            }
+        }
+    }
+
+    template <class T, class A=allocator_type>
+    typename std::enable_if<!is_stateless<A>::value,object_iterator>::type 
+    set_(object_iterator hint, key_storage_type&& name, T&& val)
+    {
+        switch (var_.type_id())
+        {
+        case json_type_tag::object_t:
+            return object_value().set_(hint, std::forward<key_storage_type>(name), basic_json(std::forward<T>(val),object_value().get_allocator()));
+            break;
+            // Cannot create object implicitly
         default:
             {
                 JSONCONS_THROW_EXCEPTION(std::runtime_error,"Attempting to set on a value that is not an object");
