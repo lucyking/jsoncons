@@ -172,10 +172,10 @@ BOOST_AUTO_TEST_CASE(test_chained_filters)
     j.dump(filter1);
     ojson j2 = decoder.get_result();
     BOOST_CHECK(j2.size() == 4);
-    BOOST_CHECK(j2["first"] == 1);
-    BOOST_CHECK(j2["second"] == 2);
-    BOOST_CHECK(j2["third"] == 3);
-    BOOST_CHECK(j2["fourth"] == 4);
+    BOOST_CHECK(j2["first"] == ojson(1));
+    BOOST_CHECK(j2["second"] == ojson(2));
+    BOOST_CHECK(j2["third"] == ojson(3));
+    BOOST_CHECK(j2["fourth"] == ojson(4));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

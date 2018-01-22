@@ -500,7 +500,7 @@ public:
                     {
                         JSONCONS_THROW_EXCEPTION(std::runtime_error,"Illegal unicode");
                     }
-                    return target;
+                    return Json(target);
                 }
 
                 case msgpack_format::str16_cd: 
@@ -517,7 +517,7 @@ public:
                     {
                         JSONCONS_THROW_EXCEPTION(std::runtime_error,"Illegal unicode");
                     }
-                    return target;
+                    return Json(target);
                 }
 
                 case msgpack_format::str32_cd: 
@@ -534,7 +534,7 @@ public:
                     {
                         JSONCONS_THROW_EXCEPTION(std::runtime_error,"Illegal unicode");
                     }
-                    return target;
+                    return Json(target);
                 }
 
                 case msgpack_format::array16_cd: 

@@ -3416,7 +3416,7 @@ public:
         switch (var_.type_id())
         {
         case json_type_tag::array_t:
-            array_value().resize(n, val);
+            array_value().resize(n, basic_json(val));
             break;
         default:
             break;

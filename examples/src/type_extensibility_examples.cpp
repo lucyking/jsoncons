@@ -52,7 +52,7 @@ void type_extensibility_examples()
 
     book book1{"Haruki Murakami", "Kafka on the Shore", 25.17};
 
-    json j = book1;
+    json j = json(book1);
 
     std::cout << "(1) " << std::boolalpha << j.is<book>() << "\n\n";
 
@@ -67,7 +67,7 @@ void type_extensibility_examples()
 
     std::vector<book> book_array{book1, book2};
 
-    json ja = book_array;
+    json ja = json(book_array);
 
     std::cout << "(4) " << std::boolalpha 
                         << ja.is<std::vector<book>>() << "\n\n";

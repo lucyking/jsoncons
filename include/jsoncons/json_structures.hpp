@@ -51,6 +51,18 @@ public:
     allocator_type self_allocator_;
 };
 
+template <class Json>
+struct explicit_adaptor
+{
+    Json value;
+
+    template <class T>
+    explicit_adaptor(const T& val)
+        : value(val)
+    {
+    }
+};
+
 // json_array
 
 template <class Json>
@@ -126,24 +138,24 @@ public:
     {
     }
 
-    json_array(std::initializer_list<Json> init)
+    json_array(std::initializer_list<explicit_adaptor<Json>> init)
         : Json_array_base_<Json>()
     {
         elements_.reserve(init.size());
         for (auto& item : init)
         {
-            elements_.emplace_back(Json(item));
+            elements_.emplace_back(item.value);
         }
     }
 
-    json_array(std::initializer_list<Json> init, 
+    json_array(std::initializer_list<explicit_adaptor<Json>> init, 
                const allocator_type& allocator)
         : Json_array_base_<Json>(allocator)
     {
         elements_.reserve(init.size());
         for (auto& item : init)
         {
-            elements_.emplace_back(Json(item, allocator));
+            elements_.emplace_back(item.value, allocator);
         }
     }
 
@@ -599,24 +611,24 @@ public:
     {
     }
 
-    json_object(std::initializer_list<std::pair<string_view_type,Json>> init)
+    json_object(std::initializer_list<std::pair<string_view_type,explicit_adaptor<Json>>> init)
         : Json_object_<KeyT,Json>()
     {
         this->members_.reserve(init.size());
         for (auto& item : init)
         {
-            insert_or_assign(item.first, item.second);
+            insert_or_assign(item.first, item.second.value);
         }
     }
 
-    json_object(std::initializer_list<std::pair<string_view_type,Json>> init, 
+    json_object(std::initializer_list<std::pair<string_view_type,explicit_adaptor<Json>>> init, 
                 const allocator_type& allocator)
         : Json_object_<KeyT,Json>(allocator)
     {
         this->members_.reserve(init.size());
         for (auto& item : init)
         {
-            insert_or_assign(item.first, item.second, allocator);
+            insert_or_assign(item.first, item.second.value, allocator);
         }
     }
 
@@ -1248,25 +1260,24 @@ public:
     {
     }
 
-
-    json_object(std::initializer_list<std::pair<string_view_type,Json>> init)
+    json_object(std::initializer_list<std::pair<string_view_type,explicit_adaptor<Json>>> init)
         : Json_object_<KeyT,Json>()
     {
         this->members_.reserve(init.size());
         for (auto& item : init)
         {
-            insert_or_assign(item.first, item.second);
+            insert_or_assign(item.first, item.second.value);
         }
     }
 
-    json_object(std::initializer_list<std::pair<string_view_type,Json>> init, 
+    json_object(std::initializer_list<std::pair<string_view_type,explicit_adaptor<Json>>> init, 
                 const allocator_type& allocator)
         : Json_object_<KeyT,Json>(allocator)
     {
         this->members_.reserve(init.size());
         for (auto& item : init)
         {
-            insert_or_assign(item.first, item.second, allocator);
+            insert_or_assign(item.first, item.second.value, allocator);
         }
     }
 
