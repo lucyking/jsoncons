@@ -3964,22 +3964,12 @@ public:
     template <class T>
     std::pair<object_iterator,bool> set(const string_view_type& name, T&& val)
     {
-        switch (var_.type_id())
-        {
-        case json_type_tag::empty_object_t:
-            create_object_implicitly();
-            // FALLTHRU
-        case json_type_tag::object_t:
-            return object_value().insert_or_assign(name, std::forward<T>(val));
-        default:
-            {
-                JSONCONS_THROW_EXCEPTION_1(std::runtime_error,"Attempting to set %s on a value that is not an object", view_to_string(name));
-            }
-        }
+        return insert_or_assign(name, std::forward<T>(val));
     }
 
-    template <class T>
-    std::pair<object_iterator,bool> insert_or_assign(const string_view_type& name, T&& val)
+    template <class T, class A=allocator_type>
+    typename std::enable_if<is_stateless<A>::value,std::pair<object_iterator,bool>>::type 
+    insert_or_assign(const string_view_type& name, T&& val)
     {
         switch (var_.type_id())
         {
@@ -3988,6 +3978,21 @@ public:
             // FALLTHRU
         case json_type_tag::object_t:
             return object_value().insert_or_assign(name, basic_json(std::forward<T>(val)));
+        default:
+            {
+                JSONCONS_THROW_EXCEPTION_1(std::runtime_error,"Attempting to set %s on a value that is not an object", view_to_string(name));
+            }
+        }
+    }
+
+    template <class T, class A=allocator_type>
+    typename std::enable_if<!is_stateless<A>::value,std::pair<object_iterator,bool>>::type 
+    insert_or_assign(const string_view_type& name, T&& val)
+    {
+        switch (var_.type_id())
+        {
+        case json_type_tag::object_t:
+            return object_value().insert_or_assign(name, basic_json(std::forward<T>(val),object_value().get_allocator()));
         default:
             {
                 JSONCONS_THROW_EXCEPTION_1(std::runtime_error,"Attempting to set %s on a value that is not an object", view_to_string(name));
@@ -4188,22 +4193,12 @@ public:
     template <class T>
     object_iterator set(object_iterator hint, const string_view_type& name, T&& val)
     {
-        switch (var_.type_id())
-        {
-        case json_type_tag::empty_object_t:
-            create_object_implicitly();
-            // FALLTHRU
-        case json_type_tag::object_t:
-            return object_value().insert_or_assign(hint, name, std::forward<T>(val));
-        default:
-            {
-                JSONCONS_THROW_EXCEPTION_1(std::runtime_error,"Attempting to set %s on a value that is not an object", view_to_string(name));
-            }
-        }
+        return insert_or_assign(hint, name, std::forward<T>(val));
     }
 
-    template <class T>
-    object_iterator insert_or_assign(object_iterator hint, const string_view_type& name, T&& val)
+    template <class T, class A=allocator_type>
+    typename std::enable_if<is_stateless<A>::value,object_iterator>::type 
+    insert_or_assign(object_iterator hint, const string_view_type& name, T&& val)
     {
         switch (var_.type_id())
         {
@@ -4211,7 +4206,22 @@ public:
             create_object_implicitly();
             // FALLTHRU
         case json_type_tag::object_t:
-            return object_value().insert_or_assign(hint, name, std::forward<T>(val));
+            return object_value().insert_or_assign(hint, name, basic_json(std::forward<T>(val)));
+        default:
+            {
+                JSONCONS_THROW_EXCEPTION_1(std::runtime_error,"Attempting to set %s on a value that is not an object", view_to_string(name));
+            }
+        }
+    }
+
+    template <class T, class A=allocator_type>
+    typename std::enable_if<!is_stateless<A>::value,object_iterator>::type 
+    insert_or_assign(object_iterator hint, const string_view_type& name, T&& val)
+    {
+        switch (var_.type_id())
+        {
+        case json_type_tag::object_t:
+            return object_value().insert_or_assign(hint, name, basic_json(std::forward<T>(val),object_value().get_allocator()));
         default:
             {
                 JSONCONS_THROW_EXCEPTION_1(std::runtime_error,"Attempting to set %s on a value that is not an object", view_to_string(name));
