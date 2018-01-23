@@ -372,11 +372,13 @@ BOOST_AUTO_TEST_CASE(test_jsonpath_filter_exclaim)
     std::string expr1 = "(!(1 + 1))";
     auto res1 = parser.parse(parent, expr1.c_str(), expr1.c_str()+ expr1.length(), &pend);
     auto result1 = res1.eval(parent);
+    std::cout << "result1: " << result1 << std::endl;
     BOOST_CHECK_EQUAL(json(false),result1);
 
     std::string expr2 = "(!0)";
     auto res2 = parser.parse(parent, expr2.c_str(), expr2.c_str()+ expr2.length(), &pend);
     auto result2= res2.eval(parent);
+    std::cout << "result2: " << result2 << std::endl;
     BOOST_CHECK_EQUAL(json(true),result2);
 }
 
@@ -457,9 +459,9 @@ BOOST_AUTO_TEST_CASE(test_jsonpath_filter_uni)
     auto result1 = res.eval(parent);
 
     //std::cout << (int)result1.type_id() << std::endl;
-    //std::cout << result1 << std::endl;
-    BOOST_CHECK(json(0) == 0);
-    BOOST_CHECK(result1 == 0);
+    std::cout << result1 << std::endl;
+    //BOOST_CHECK(json(0) == 0);
+    BOOST_CHECK(result1 == json(0));
 
     BOOST_CHECK_EQUAL(json(0),result1);
 }

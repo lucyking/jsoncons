@@ -125,19 +125,19 @@ BOOST_AUTO_TEST_CASE(test_assign_vector_of_bool)
     json b;
     b = v;
 
-    BOOST_CHECK_EQUAL(b[0],true);
-    BOOST_CHECK_EQUAL(b[1],false);
-    BOOST_CHECK_EQUAL(b[2],true);
+    BOOST_CHECK_EQUAL(b[0],json(true));
+    BOOST_CHECK_EQUAL(b[1],json(false));
+    BOOST_CHECK_EQUAL(b[2],json(true));
 }
 
 BOOST_AUTO_TEST_CASE(test_construct_vector_of_bool)
 {
     std::vector<bool> v = {true,false,true};
-    json a = v;
+    json a = json(v);
 
-    BOOST_CHECK_EQUAL(a[0],true);
-    BOOST_CHECK_EQUAL(a[1],false);
-    BOOST_CHECK_EQUAL(a[2],true);
+    BOOST_CHECK_EQUAL(a[0],json(true));
+    BOOST_CHECK_EQUAL(a[1],json(false));
+    BOOST_CHECK_EQUAL(a[2],json(true));
 }
 
 BOOST_AUTO_TEST_CASE(test_construct_const_vector_of_bool)
@@ -164,23 +164,23 @@ BOOST_AUTO_TEST_CASE(test_as_valarray)
     json a = json::array{0,1,2,3,4}; 
     std::valarray<int> v = a.as<std::valarray<int>>();
 
-    BOOST_CHECK_EQUAL(v[0],0);
-    BOOST_CHECK_EQUAL(v[1],1);
-    BOOST_CHECK_EQUAL(v[2],2);
-    BOOST_CHECK_EQUAL(v[3],3);
-    BOOST_CHECK_EQUAL(v[4],4);
+    BOOST_CHECK_EQUAL(v[0], 0);
+    BOOST_CHECK_EQUAL(v[1], 1);
+    BOOST_CHECK_EQUAL(v[2], 2);
+    BOOST_CHECK_EQUAL(v[3], 3);
+    BOOST_CHECK_EQUAL(v[4], 4);
 }
 
 BOOST_AUTO_TEST_CASE(test_assign_valarray)
 {
     std::valarray<int> v {0,1,2,3,4}; 
-    json a = v;
+    json a = json(v);
 
-    BOOST_CHECK_EQUAL(a[0],0);
-    BOOST_CHECK_EQUAL(a[1],1);
-    BOOST_CHECK_EQUAL(a[2],2);
-    BOOST_CHECK_EQUAL(a[3],3);
-    BOOST_CHECK_EQUAL(a[4],4);
+    BOOST_CHECK_EQUAL(a[0],json(0));
+    BOOST_CHECK_EQUAL(a[1],json(1));
+    BOOST_CHECK_EQUAL(a[2],json(2));
+    BOOST_CHECK_EQUAL(a[3],json(3));
+    BOOST_CHECK_EQUAL(a[4],json(4));
 }
 
 BOOST_AUTO_TEST_CASE(test_is_json_map)

@@ -1078,7 +1078,7 @@ BOOST_AUTO_TEST_CASE(test_jsonpath_string_indexation)
     json result3 = json_query(val, "$..about[2]");
     BOOST_CHECK_EQUAL(expected3, result3);
 
-    json expected4 = json::array(1,3);
+    json expected4 = json::array(1,json(3));
     json result4 = json_query(val, "$..about.length");
     BOOST_CHECK_EQUAL(expected4, result4);
 }
