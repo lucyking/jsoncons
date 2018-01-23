@@ -173,5 +173,14 @@ BOOST_AUTO_TEST_CASE(test_double_to_wstring)
     s = float_to_string<wchar_t>(x, std::numeric_limits<double>::digits10);
     BOOST_CHECK(s == std::wstring(L"-11.0"));
 }
+
+BOOST_AUTO_TEST_CASE(test_double_to_string_issue)
+{
+    json val = json::parse("422299999999999.97");
+    std::cout << "as_string" << val.as_string() << std::endl;
+    std::cout << val << std::endl;
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()
 
